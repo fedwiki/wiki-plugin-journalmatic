@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Page Journal Compactor</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>➡</text></svg>">
+    <script type="module">
+
+      import { compactJournal } from './modules/compact-journal.js'
+      import { checkJournal } from './modules/journal-checker.js'
+      import { showScanResults } from './modules/show-scan-results.js'
+
+      // prevent reload when dropping wiki page flag (or any url)
+      window.addEventListener("dragover",function(e){
+        e.preventDefault();
+      },false);
+      window.addEventListener("drop",function(e){
+        e = e || event;
+        e.preventDefault();
+      },false);
+
+      window.addEventListener('dragenter', function(e){
+        e.preventDefault()
+      })
+
+      const identifiers = Object.fromEntries(
+        new URLSearchParams(
+          window.location.hash.substr(1)
+        ).entries()
+      )
+
+      function dragover_handler(ev) {
+        ev.preventDefault()
+      }
+
+      function error_clear() {
+        document.querySelector('#error-message').innerHTML = ''
+      }
+
+      function show_error(err) {
+        document.querySelector('#error-message').innerHTML = '<p>' + err + '</p>'
+      }
+
+      function link_click(ev) {
+        ev.preventDefault()
+        // to be done...
+        console.log('identifiers', identifiers)
+        console.log('link clicked', ev)
+        if (ev.target.dataset['site'] === identifiers.site) {
+          window.parent.postMessage({
+            action: 'doInternalLink',
+            title: ev.target.text,
+            keepLineup: event.shiftKey
+          }, '*')
+        } else {
+          window.parent.postMessage({
+            action: 'doInternalLink',
+            title: ev.target.text,
+            site: ev.target.dataset['site']
+          }, '*')
+        }
+      }
+
+      function show_message({message, clear}) {
+        const messageDiv = document.querySelector('#message')
+        if (clear) {
+          messageDiv.replaceChildren()
+        }
+        if (message) {
+          const newP = document.createElement('p')
+          newP.style['margin'] = 0
+          newP.innerHTML = message
+          messageDiv.appendChild(newP)
+        }
+        //
+        window.parent.postMessage({
+                    action: "resize",
+                    height: document.body.scrollHeight + 2
+                  }, "*")
+      }
+
+      async function drop_handler(ev) {
+        ev.preventDefault()
+        error_clear()
+        let dt = ev.dataTransfer
+        if (dt != null) {
+          let types = dt.types
+          if ((types != null) && (types.includes('text/uri-list') || types.includes('text/x-moz-urlz'))) {
+            let url = dt.getData('URL')
+            if (url != null) {
+              // we have a url
+              // but is it a page?
+              let found, ignore, origin, ref, site, slug
+              if (found = url.match(/^(https?:)\/\/([a-zA-Z0-9:.-]+)(\/([a-zA-Z0-9:.-]+)\/([a-z0-9-]+(_rev\d+)?))+$/)) {
+                let protocol = found[1]
+                let origin = found[2]
+                let site = found[4]
+                let slug = found[5]
+                if (['view','local','origin'].includes(site)) {
+                  site = origin
+                }
+                // we have a wiki page
+                let pageURL = protocol + '//' + site + '/' + slug + '.json'
+                console.info('we have a page', pageURL)
+
+                fetch_page(pageURL)
+                .then(pageJSON => {
+                  let linkTitle = site
+                  if (site === identifiers.site) {
+                    linkTitle = 'view'
+                  }
+                  show_message({
+                    message: `Compacting Page - <a class='internal' href='//${site}/${slug}.html' title='${linkTitle}' data-site='${site}' data-slug='${slug}' onclick='link_click(event)'>${pageJSON.title}</a>`,
+                    clear: true
+                  })
+                  
+                  return compactJournal({ pageJSON, site, slug })
+                })
+                .then(page => {
+                  return { page, 'results': checkJournal(page, site, slug) }
+                })
+                .then(function ({ page, results }) {
+                  console.info('results', results)
+                  if (results.size === 0) {
+                    show_message({
+                      message: 'Compacted page has no journal errors'
+                    })
+                  } else {
+                    show_message({
+                      message: `Compacted page has ${results.size} problems remaining`
+                    })
+                    showScanResults({ results })
+                  }
+                  return page
+                })
+                .then(page => {
+                  // add flag to record compactor
+                  let compactorFork = {
+                    'type': 'fork',
+                    'date': Date.now()
+                  }
+                  if (site != identifiers.site) {
+                    compactorFork.site = site
+                  }
+                  page.journal.push(compactorFork)
+
+                  window.parent.postMessage({
+                    action: "showResult",
+                    page,
+                    // pageKey,
+                    keepLineup: ev.shiftKey
+                  }, "*")
+                })
+
+              } else {
+                show_error('That does not look like a page flag!')
+              }
+            } else {
+              show_error('Unrecognised item dropped')
+            }
+          } else {
+            show_error('Unrecognised item dropped')
+          }
+        }
+      }
+
+      async function fetch_page(url) {
+        const pageJSON = await fetch(url)
+          .then(response => {
+            if (response.ok) {
+              return response
+            }
+            throw new Error('Response not OK')
+          })
+          .then(response => {
+            return response.json()
+          })
+          .catch(function (error) {
+            show_error('Something when wrong fetching ' + url)
+            return
+          })
+        return pageJSON
+      }
+
+      document.querySelector('#drop_zone').addEventListener('drop', drop_handler)
+      document.querySelector('#drop_zone').addEventListener('dragenter', dragover_handler)
+      document.querySelector('#drop_zone').addEventListener('dragover', dragover_handler)
+
+      window.link_click = link_click
+
+
+    </script>
+  </head>
+  <body>
+    <h4>Page Journal Compactor</h4>
+    <div id="drop_zone" style="border: 1px dashed blue; text-align: center; margin-bottom: 12px;">
+      <p>drop page flag here</p>
+    </div>
+    <div id="message"></div>
+    <div id="results"></div>
+    <div id="error-message"></div>
+
+    <template id="results-line">
+      <p><span style='color: red; font-weight: bold'></span></p>
+    </template>
+  </body>
+</html>

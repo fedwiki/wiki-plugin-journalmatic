@@ -1,0 +1,20 @@
+{
+  "name": "wiki-plugin-journal-tools",
+  "version": "0.0.1",
+  "description": "A collection of frame based tools for resolving page/journal issues.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wiki",
+    "\"federated",
+    "wiki\"",
+    "\"plugin\""
+  ],
+  "author": "Paul Rodwell",
+  "license": "MIT",
+  "peerDependencies": {
+    "wiki-plugin-frame": ">=0.8.9"
+  }
+}

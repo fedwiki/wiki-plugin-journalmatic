@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Check Page Journal</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>➡</text></svg>">
+    <link rel="stylesheet" href="./journal-tools.css">
+    <script type="module">
+
+      import { checkJournal } from './modules/journal-checker.js'
+
+      // prevent reload when dropping wiki page flag (or any url)
+      window.addEventListener("dragover",function(e){
+        e.preventDefault()
+      })
+      window.addEventListener("drop",function(e){
+        e.preventDefault()
+      })
+
+      window.addEventListener('dragenter', function(e){
+        e.preventDefault()
+      })
+
+      const identifiers = Object.fromEntries(
+        new URLSearchParams(
+          window.location.hash.substr(1)
+        ).entries()
+      )
+
+      // from JavaScript task queue, by Michal Charemza (https://charemza.name/blog/posts/javascript/async/javascript-queue-with-concurrency-limit/)
+      const Queue = (concurrency) => {
+          var running = 0;
+          const tasks = [];
+
+          return async (task) => {
+              tasks.push(task);
+              if (running >= concurrency) return;
+
+              ++running;
+              while (tasks.length) {
+                  try {
+                      await tasks.shift()();
+                  } catch(err) {
+                      console.error(err);
+                  }
+              }
+              --running;
+          }
+      }
+
+
+      function error_clear() {
+        document.getElementById('error-message').innerHTML = ''
+      }
+
+      function show_error(err) {
+        document.getElementById('error-message').innerHTML = '<p>' + err + '</p>'
+      }
+
+      function link_click(event) {
+        event.preventDefault()
+        if (event.target.dataset['site'] === identifiers.site) {
+          window.parent.postMessage({
+            action: 'doInternalLink',
+            title: event.target.text,
+            keepLineup: event.shiftKey
+          }, '*')
+        } else {
+          window.parent.postMessage({
+            action: 'doInternalLink',
+            title: event.target.text,
+            site: event.target.dataset['site'],
+            keepLineup: event.shiftKey
+          }, '*')
+        }
+      }
+
+      async function fetch_page(url) {
+        const pageJSON = await fetch(url)
+          .then(response => {
+            if (response.ok) {
+              return response
+            }
+            throw new Error('Response not OK')
+          })
+          .then(response => {
+            return response.json()
+          })
+          .catch(function (error) {
+            show_error('Something when wrong fetching ' + url)
+            return
+          })
+        return pageJSON
+      }
+
+      function scan_page({slug}) {
+        console.info(`about to scan ${slug}`)
+        fetch_page(`/${slug}.json`)
+        .then(pageJSON => {
+          return checkJournal(pageJSON)
+        })
+        .then(result => {
+          if (result.size === 0) {
+            goodPages++
+            document.getElementById(`${slug}`).querySelector('td').textContent = '✓'
+            document.getElementById(`${slug}`).hidden = true
+          } else {
+            problemPages++
+            let resText = document.createElement('span')
+            resText.setAttribute('style', 'color: red;')
+            resText.textContent = Array.from(result.keys()).join(', ').toUpperCase()
+            document.getElementById(`${slug}`).querySelector('td').append(resText)
+          }
+        })
+        .catch(err => {
+          console.error('Problem scanning', slug, err)
+          problemPages++
+          let resText = document.createElement('span')
+            resText.setAttribute('style', 'color: red;')
+            resText.textContent = 'Scan Failed.'
+            document.getElementById(`${slug}`).querySelector('td').append(resText)
+        })
+        .finally(() => {
+          let messageBad = document.createElement('p')
+          if (problemPages == 0) {
+            messageBad.setAttribute('style', 'color: green;')
+            messageBad.textContent = 'No pages with problems found.'
+          } else {
+            messageBad.setAttribute('style', 'color: red;')
+            if (problemPages == 1) {
+              messageBad.textContent = `${problemPages} page with problems found.` 
+            } else {
+              messageBad.textContent = `${problemPages} pages with problems found.`
+            }
+          }
+
+          let messageGood = document.createElement('p')
+          if (goodPages == 0) {
+            messageGood.setAttribute('style', 'color: red;')
+            messageGood.textContent = 'No pages without problems found'
+          } else {
+            messageGood.setAttribute('style', 'color: green;')
+            if (goodPages == 1) {
+              messageGood.textContent = `${goodPages} page without problems found.`
+            } else {
+              messageGood.textContent = `${goodPages} pages without problems found.`
+            }
+          }
+          
+          document.getElementById('message').replaceChildren(messageGood, messageBad)
+          window.parent.postMessage({
+                    action: "resize",
+                    height: document.body.scrollHeight + 2
+                  }, "*")
+        })
+
+      }
+
+      let problemPages = 0
+      let goodPages = 0
+
+      async function site_scan() {
+        console.info('about to scan')
+
+        document.getElementById('button').hidden = true
+
+        const template = document.getElementById('results-line')
+        const resultTable = document.getElementById('results')
+
+        const sitemap = await fetch_page('/system/sitemap.json')
+
+        const scanQueue = Queue(4)
+
+        sitemap.forEach( (element) => {
+          let clone = template.content.cloneNode(true)
+          clone.querySelector('tr').setAttribute('id', element.slug)
+
+          let link = document.createElement('a')
+          link.setAttribute('class', 'internal')
+          link.setAttribute('href', `/${element.slug}.html`)
+          link.setAttribute('title', 'view')
+          link.setAttribute('data-slug', element.slug)
+          link.setAttribute('onclick', 'link_click(event)')
+          link.innerHTML = element.title
+          clone.querySelector('th').append(link)
+          
+          resultTable.appendChild(clone)
+
+          scanQueue(async () => scan_page({slug: element.slug}))
+        } )
+
+        window.parent.postMessage({
+                    action: "resize",
+                    height: document.body.scrollHeight + 2
+                  }, "*")
+      }
+
+      window.link_click = link_click
+      window.site_scan = site_scan
+
+    </script>
+
+  </head>
+  <body>
+    <h4>Site Checker</h4>
+    <div id="button">
+      <button onclick="site_scan()">Scan Site</button>
+    </div>
+    <div id="message"></div>
+    <table id="results"></table>
+    <div id="error-message"></div>
+
+    <template id="results-line">
+      <tr><th></th><td></td></tr>
+    </template>
+
+  </body>
+</html>
