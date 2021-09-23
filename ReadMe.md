@@ -11,7 +11,7 @@ The current tools include:
 
 Not in any particular order:
 
-* [] Finalise the page names for the inital 3 tool pages.
-* [] Add some reporting of the causes of a revision error.
-* [] Add a second compression tool that reduces journal size to a greater ammount.
+* [ ] Finalise the page names, and content.
+* [ ] Add some reporting of the causes of a revision error.
+* [ ] Add a second compression tool that reduces journal size to a greater ammount.
  
