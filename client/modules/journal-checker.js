@@ -55,7 +55,7 @@ function checkJournal (pageJSON, site, slug) {
     // apply journal action to page
     function applyAction (page, action) {
       let index
-      const order = () => Array.from(page.story || []).map((item) => (item !== null ? item.id : undefined))
+      const order = () => Array.from(page.story || []).map((item) => (item != null ? item.id : undefined))
 
       const add = function (after, item) {
         const index = order().indexOf(after) + 1
@@ -75,9 +75,9 @@ function checkJournal (pageJSON, site, slug) {
 
       switch (action.type) {
         case 'create':
-          if (action.item !== null) {
-            if (action.item.title !== null) { page.title = action.item.title }
-            if (action.item.story !== null) { page.story = action.item.story.slice() }
+          if (action.item != null) {
+            if (action.item.title != null) { page.title = action.item.title }
+            if (action.item.story != null) { page.story = action.item.story.slice() }
           }
           break
         case 'add':
@@ -113,6 +113,12 @@ function checkJournal (pageJSON, site, slug) {
     if (chronError) {
       const sortedJournal = page.journal.sort(compare)
 
+      // check for missing creation
+      if (sortedJournal[0].type != 'create') {
+        console.log('create not first action after sort!')
+        checkerResults.set('creation', true)
+      }
+
       let revPage = { title: page.title, story: [] }
       for (const action of sortedJournal || []) {
         applyAction(revPage, action || {})
@@ -122,6 +128,13 @@ function checkJournal (pageJSON, site, slug) {
         checkerResults.set('revision', true)
       }
     } else {
+      
+      // check for missing creation
+      if (page.journal[0].type != 'create') {
+        console.log('create not first action!')
+        checkerResults.set('creation', true)
+      }
+
       let revPage = { title: page.title, story: [] }
       for (const action of page.journal || []) {
         applyAction(revPage, action || {})
@@ -134,7 +147,14 @@ function checkJournal (pageJSON, site, slug) {
   }
 
   // some initial basic checks
-  basicChecks(pageJSON)
+  try {
+    basicChecks(pageJSON)
+  } catch (error) {
+    console.error('Checks fail with', error)
+    checkerResults.set('checks', true)
+  }
+
+  console.log("results", checkerResults)
 
   return checkerResults
 }

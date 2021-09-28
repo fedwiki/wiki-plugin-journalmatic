@@ -24,6 +24,13 @@ function showScanResults ({ results }) {
     resultDiv.appendChild(clone)
   }
 
+  if (results.has('creation')) {
+    let clone = template.content.cloneNode(true)
+    clone.querySelector('span').textContent = 'CREATION'
+    clone.querySelector('p').append(' page creation is not first action, or missing.')
+    resultDiv.appendChild(clone)
+  }
+
   if (results.has('chronology')) {
     let clone = template.content.cloneNode(true)
     clone.querySelector('span').textContent = 'CHRONOLOGY'
@@ -35,6 +42,13 @@ function showScanResults ({ results }) {
     let clone = template.content.cloneNode(true)
     clone.querySelector('span').textContent = 'REVISION'
     clone.querySelector('p').append(' journal cannot construct the current version.')
+    resultDiv.appendChild(clone)
+  }
+
+  if (results.has('checks')) {
+    let clone = template.content.cloneNode(true)
+    clone.querySelector('span').textContent = 'CHECK FAIL'
+    clone.querySelector('p').append(' a check has failed to run.')
     resultDiv.appendChild(clone)
   }
 }
