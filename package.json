@@ -1,5 +1,5 @@
 {
-  "name": "wiki-plugin-journal-tools",
+  "name": "wiki-plugin-journalmatic",
   "version": "0.0.1",
   "description": "A collection of frame based tools for resolving page/journal issues.",
   "main": "index.js",
