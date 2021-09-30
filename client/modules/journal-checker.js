@@ -20,9 +20,12 @@ function checkJournal (pageJSON, site, slug) {
   function basicChecks (page) {
     // check for nulls
     const isNotNull = (item) => (!item || !item.type)
-    if (page.story.every(isNotNull)) {
-      console.info('Nulls found')
-      checkerResults.set('nulls', true)
+    // an empty page is not a nulls error!
+    if (page.story.length != 0) {
+      if (page.story.every(isNotNull)) {
+        console.info('Nulls found')
+        checkerResults.set('nulls', true)
+      }
     }
 
     // check for huge and bloated journal
