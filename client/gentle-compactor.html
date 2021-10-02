@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Page Journal Compactor</title>
+    <title>Gentle Compactor</title>
     <meta charset="utf-8">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>➡</text></svg>">
+    <link rel="stylesheet" href="./journal-tools.css">
     <script type="module">
 
-      import { compactJournal } from './modules/compact-journal.js'
+      import { compactJournal } from './modules/compact-gentle.js'
       import { checkJournal } from './modules/journal-checker.js'
       import { showScanResults } from './modules/show-scan-results.js'
 
@@ -192,7 +193,7 @@
     </script>
   </head>
   <body>
-    <h4>Page Journal Compactor</h4>
+    <h4>Gentle Compactor</h4>
     <div id="drop_zone" style="border: 1px dashed blue; text-align: center; margin-bottom: 12px;">
       <p>drop page flag here</p>
     </div>

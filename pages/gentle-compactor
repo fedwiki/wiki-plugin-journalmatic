@@ -1,0 +1,62 @@
+{
+  "title": "Gentle Compactor",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "9bf35a12db60a9fb",
+      "text": "Perform a gentle compression of a page's journal. This should reduce the overall size of a page by only keeping the last of a run of edits on an item."
+    },
+    {
+      "type": "markdown",
+      "id": "0e99a507823f33e1",
+      "text": "Errors targeted:\n* HUGE\n* BLOATED\n* CHRONOLOGY"
+    },
+    {
+      "type": "frame",
+      "id": "f00d6a8c4f5f78a7",
+      "text": "PLUGIN journalmatic/gentle-compactor.html"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Gentle Compactor",
+        "story": []
+      },
+      "date": 1632999714923
+    },
+    {
+      "id": "9bf35a12db60a9fb",
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "9bf35a12db60a9fb",
+        "text": "Perform a gentle compression of a page's journal. This should reduce the overall size of a page by only keeping the last of a run of edits on an item."
+      },
+      "date": 1632999717784
+    },
+    {
+      "id": "0e99a507823f33e1",
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "0e99a507823f33e1",
+        "text": "Errors targeted:\n* HUGE\n* BLOATED\n* CHRONOLOGY"
+      },
+      "after": "9bf35a12db60a9fb",
+      "date": 1632999720081
+    },
+    {
+      "id": "f00d6a8c4f5f78a7",
+      "type": "add",
+      "item": {
+        "type": "frame",
+        "id": "f00d6a8c4f5f78a7",
+        "text": "PLUGIN journalmatic/gentle-compactor.html"
+      },
+      "after": "0e99a507823f33e1",
+      "date": 1632999725571
+    }
+  ]
+}

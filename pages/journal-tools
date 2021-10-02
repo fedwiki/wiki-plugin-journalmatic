@@ -4,27 +4,52 @@
     {
       "type": "paragraph",
       "id": "6293d77b90ed43d2",
-      "text": "This is a collection of tools that will..."
+      "text": "A collection of tools to help with the identifying pages with problems, and for addressing some of them."
+    },
+    {
+      "type": "markdown",
+      "id": "46f6b9522b9b520e",
+      "text": "# Scanning Tools"
     },
     {
       "type": "paragraph",
       "id": "c30cfe378438c374",
-      "text": "Work in Progress - names will change:"
+      "text": "Two tools for scanning for problems:"
     },
     {
       "type": "paragraph",
       "id": "c2f04b6ec56741a9",
-      "text": "[[Scan Site]]"
+      "text": "[[Scan Site]]: Scans your wiki looking for pages with problems."
     },
     {
       "type": "paragraph",
-      "id": "60e9130d386825f4",
-      "text": "[[Journal Checker]]"
+      "id": "78c38876c70c2fd5",
+      "text": "[[Scan Page]]: Scan an single page for problems."
+    },
+    {
+      "type": "markdown",
+      "id": "c2abd3b9679b335f",
+      "text": "# Remedial Tools"
+    },
+    {
+      "type": "markdown",
+      "id": "08bbaf7d716d7f45",
+      "text": "__WARNING__: It is recommended you take a backup of your pages before using these tools, by saving a [http:/system/export.json wiki export], or taking a backup of the wiki files if you have access to them."
     },
     {
       "type": "paragraph",
       "id": "4dab25884574e5f0",
-      "text": "[[Journal Compactor]]"
+      "text": "Each tool will indicate which problems it will try to correct."
+    },
+    {
+      "type": "paragraph",
+      "id": "096744471a9c1c36",
+      "text": "[[Rectify Chronology]]: Sorts a page's journal, to fix CHRONOLOGY errors."
+    },
+    {
+      "type": "paragraph",
+      "id": "9b12d46ba08ce2f9",
+      "text": "[[Gentle Compactor]]: Sorts and gently compresses a page's journal. Will fix CHRONOLOGY errors, and help with HUGE and BLOATED. "
     }
   ],
   "journal": [
@@ -34,89 +59,136 @@
         "title": "Journal Tools",
         "story": []
       },
-      "date": 1630491693507
+      "date": 1633010937467
     },
     {
-      "item": {
-        "type": "factory",
-        "id": "6293d77b90ed43d2"
-      },
       "id": "6293d77b90ed43d2",
       "type": "add",
-      "date": 1630491783874
-    },
-    {
-      "type": "edit",
-      "id": "6293d77b90ed43d2",
       "item": {
         "type": "paragraph",
         "id": "6293d77b90ed43d2",
-        "text": "This is a collection of tools that will..."
+        "text": "A collection of tools to help with the identifying pages with problems, and for addressing some of them."
       },
-      "date": 1630491801095
+      "date": 1633010946143
     },
     {
+      "id": "46f6b9522b9b520e",
+      "type": "add",
       "item": {
-        "type": "factory",
-        "id": "c30cfe378438c374"
+        "type": "markdown",
+        "id": "46f6b9522b9b520e",
+        "text": "# Scanning Tools"
       },
+      "after": "6293d77b90ed43d2",
+      "date": 1633010949558
+    },
+    {
       "id": "c30cfe378438c374",
       "type": "add",
-      "after": "6293d77b90ed43d2",
-      "date": 1631957494351
-    },
-    {
-      "type": "edit",
-      "id": "c30cfe378438c374",
       "item": {
         "type": "paragraph",
         "id": "c30cfe378438c374",
-        "text": "Current tools:"
+        "text": "Two tools for scanning for problems:"
       },
-      "date": 1631957509192
+      "after": "46f6b9522b9b520e",
+      "date": 1633010951541
     },
     {
-      "type": "add",
       "id": "c2f04b6ec56741a9",
+      "type": "add",
       "item": {
         "type": "paragraph",
         "id": "c2f04b6ec56741a9",
-        "text": "[[Scan Site]]"
+        "text": "[[Scan Site]]: Scans your wiki looking for pages with problems."
       },
       "after": "c30cfe378438c374",
-      "date": 1631957516705
+      "date": 1633010954494
     },
     {
+      "id": "78c38876c70c2fd5",
       "type": "add",
-      "id": "60e9130d386825f4",
       "item": {
         "type": "paragraph",
-        "id": "60e9130d386825f4",
-        "text": "[[Journal Checker]]"
+        "id": "78c38876c70c2fd5",
+        "text": "[[Scan Page]]: Scan an single page for problems."
       },
       "after": "c2f04b6ec56741a9",
-      "date": 1631957541176
+      "date": 1633010957696
     },
     {
+      "id": "c2abd3b9679b335f",
       "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "c2abd3b9679b335f",
+        "text": "# Remedial Tools"
+      },
+      "after": "78c38876c70c2fd5",
+      "date": 1633010960925
+    },
+    {
+      "id": "08bbaf7d716d7f45",
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "08bbaf7d716d7f45",
+        "text": "__WARNING__: It is recommended you take a backup of your pages before using these tools, by saving a [http:/system/export.json wiki export], or taking a backup of the wiki files if you have access to them."
+      },
+      "after": "c2abd3b9679b335f",
+      "date": 1633010964213
+    },
+    {
       "id": "4dab25884574e5f0",
+      "type": "add",
       "item": {
         "type": "paragraph",
         "id": "4dab25884574e5f0",
-        "text": "[[Journal Compactor]]"
+        "text": "Each tool will indicate which problems it will try to correct."
       },
-      "after": "60e9130d386825f4",
-      "date": 1631957552254
+      "after": "08bbaf7d716d7f45",
+      "date": 1633010967604
+    },
+    {
+      "id": "096744471a9c1c36",
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "096744471a9c1c36",
+        "text": "[[Gentle Compactor]]: Sorts and gently compresses a page's journal. Will fix NULLS and CHRONOLOGY errors, and help with HUGE and BLOATED. "
+      },
+      "after": "4dab25884574e5f0",
+      "date": 1633010973220
     },
     {
       "type": "edit",
-      "id": "c30cfe378438c374",
+      "id": "096744471a9c1c36",
       "item": {
         "type": "paragraph",
-        "id": "c30cfe378438c374",
-        "text": "Work in Progress - names will change:"
+        "id": "096744471a9c1c36",
+        "text": "[[Gentle Compactor]]: Sorts and gently compresses a page's journal. Will fix CHRONOLOGY errors, and help with HUGE and BLOATED. "
       },
-      "date": 1631957572660
+      "date": 1633173039007
+    },
+    {
+      "type": "edit",
+      "id": "096744471a9c1c36",
+      "item": {
+        "type": "paragraph",
+        "id": "096744471a9c1c36",
+        "text": "[[Rectify Chronology]]: Sorts a page's journal, to fix CHRONOLOGY errors."
+      },
+      "date": 1633183118858
+    },
+    {
+      "type": "add",
+      "id": "9b12d46ba08ce2f9",
+      "item": {
+        "type": "paragraph",
+        "id": "9b12d46ba08ce2f9",
+        "text": "[[Gentle Compactor]]: Sorts and gently compresses a page's journal. Will fix CHRONOLOGY errors, and help with HUGE and BLOATED. "
+      },
+      "after": "096744471a9c1c36",
+      "date": 1633183121880
     }
   ]
 }

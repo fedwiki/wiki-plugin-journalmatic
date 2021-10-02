@@ -1,0 +1,46 @@
+{
+  "title": "Scan Page",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "4c97ebd8943f4294",
+      "text": "Scan a page for known problems."
+    },
+    {
+      "type": "frame",
+      "id": "c3ab25ddb4b8433a",
+      "text": "PLUGIN journalmatic/check-page.html"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Scan Page",
+        "story": []
+      },
+      "date": 1632844125724
+    },
+    {
+      "id": "4c97ebd8943f4294",
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "4c97ebd8943f4294",
+        "text": "Scan a page for known problems."
+      },
+      "date": 1632844143987
+    },
+    {
+      "id": "c3ab25ddb4b8433a",
+      "type": "add",
+      "item": {
+        "type": "frame",
+        "id": "c3ab25ddb4b8433a",
+        "text": "PLUGIN journalmatic/check-page.html"
+      },
+      "after": "4c97ebd8943f4294",
+      "date": 1632844149427
+    }
+  ]
+}
