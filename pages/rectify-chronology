@@ -1,0 +1,62 @@
+{
+  "title": "Rectify Chronology",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "4666a32dd8d663e2",
+      "text": "Sorts a page's journal."
+    },
+    {
+      "type": "markdown",
+      "id": "294d1889de4fe0ac",
+      "text": "Errors targeted:\n\n* CHRONOLOGY"
+    },
+    {
+      "type": "frame",
+      "id": "7acaa6c7307be216",
+      "text": "PLUGIN journalmatic/chronology-fix.html"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Rectify Chronology",
+        "story": []
+      },
+      "date": 1633183132374
+    },
+    {
+      "id": "4666a32dd8d663e2",
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "4666a32dd8d663e2",
+        "text": "Sorts a page's journal."
+      },
+      "date": 1633183137479
+    },
+    {
+      "id": "294d1889de4fe0ac",
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "294d1889de4fe0ac",
+        "text": "Errors targeted:\n\n* CHRONOLOGY"
+      },
+      "after": "4666a32dd8d663e2",
+      "date": 1633183139871
+    },
+    {
+      "id": "7acaa6c7307be216",
+      "type": "add",
+      "item": {
+        "type": "frame",
+        "id": "7acaa6c7307be216",
+        "text": "PLUGIN journalmatic/chronology-fix.html"
+      },
+      "after": "294d1889de4fe0ac",
+      "date": 1633183151129
+    }
+  ]
+}
