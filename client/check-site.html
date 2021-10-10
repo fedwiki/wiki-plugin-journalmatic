@@ -147,7 +147,7 @@
             }
           }
           
-          document.getElementById('message').replaceChildren(messageGood, messageBad)
+          document.getElementById('scan_message').replaceChildren(messageGood, messageBad)
           window.parent.postMessage({
                     action: "resize",
                     height: document.body.scrollHeight + 2
@@ -162,10 +162,10 @@
       async function site_scan() {
         console.info('about to scan')
 
-        document.getElementById('button').hidden = true
+        document.getElementById('scan_button').hidden = true
 
-        const template = document.getElementById('results-line')
-        const resultTable = document.getElementById('results')
+        const template = document.getElementById('results_line')
+        const resultTable = document.getElementById('scan_results')
 
         const sitemap = await fetch_page('/system/sitemap.json')
 
@@ -203,14 +203,14 @@
   </head>
   <body>
     <h4>Site Checker</h4>
-    <div id="button">
+    <div id="scan_button">
       <button onclick="site_scan()">Scan Site</button>
     </div>
-    <div id="message"></div>
-    <table id="results"></table>
-    <div id="error-message"></div>
+    <div id="scan_message"></div>
+    <table id="scan_results"></table>
+    <div id="error_message"></div>
 
-    <template id="results-line">
+    <template id="results_line">
       <tr><th></th><td></td></tr>
     </template>
 
