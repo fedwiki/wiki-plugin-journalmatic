@@ -1,3 +1,5 @@
+import { revision } from './revision.js'
+
 function checkJournal (pageJSON, site, slug) {
   
   const checkerResults = new Map()
@@ -55,60 +57,7 @@ function checkJournal (pageJSON, site, slug) {
 
     // check journal can recreate current page
 
-    // apply journal action to page
-    function applyAction (page, action) {
-      let index
-      const order = () => Array.from(page.story || []).map((item) => (item != null ? item.id : undefined))
 
-      const add = function (after, item) {
-        const index = order().indexOf(after) + 1
-        return page.story.splice(index, 0, item)
-      }
-
-      const remove = function () {
-        let index
-        if ((index = order().indexOf(action.id)) !== -1) {
-          return page.story.splice(index, 1)
-        }
-      }
-
-      if (!page.story) { page.story = [] }
-
-      let after, item
-
-      switch (action.type) {
-        case 'create':
-          if (action.item != null) {
-            if (action.item.title != null) { page.title = action.item.title }
-            if (action.item.story != null) { page.story = action.item.story.slice() }
-          }
-          break
-        case 'add':
-          add(action.after, action.item)
-          break
-        case 'edit':
-          if ((index = order().indexOf(action.id)) !== -1) {
-            page.story.splice(index, 1, action.item)
-          } else {
-            page.story.push(action.item)
-          }
-          break
-        case 'move':
-          // construct relative addresses from absolute order
-          index = action.order.indexOf(action.id)
-          after = action.order[index - 1]
-          item = page.story[order().indexOf(action.id)]
-          remove()
-          add(after, item)
-          break
-        case 'remove':
-          remove()
-          break
-      }
-
-      if (!page.journal) { page.journal = [] }
-      return page.journal.push(action)
-    }
 
 
     // if we have a chronology problem, we check for a sorted revision problem
@@ -122,10 +71,9 @@ function checkJournal (pageJSON, site, slug) {
         checkerResults.set('creation', true)
       }
 
-      let revPage = { title: page.title, story: [] }
-      for (const action of sortedJournal || []) {
-        applyAction(revPage, action || {})
-      }
+      const revIndex = sortedJournal.length
+      const revPage = revision({ revIndex, journal: sortedJournal, title: page.title })
+
       if (JSON.stringify(page.story) !== JSON.stringify(revPage.story)) {
         console.info('Sorted journal has revision problem', { page, revPage })
         checkerResults.set('revision', true)
@@ -138,10 +86,9 @@ function checkJournal (pageJSON, site, slug) {
         checkerResults.set('creation', true)
       }
 
-      let revPage = { title: page.title, story: [] }
-      for (const action of page.journal || []) {
-        applyAction(revPage, action || {})
-      }
+      const revIndex = page.journal.length
+      const revPage = revision({ revIndex, journal: page.journal, title: page.title })
+
       if (JSON.stringify(page.story) !== JSON.stringify(revPage.story)) {
         console.info('Revision problem', { page, revPage })
         checkerResults.set('revision', true)
@@ -156,8 +103,6 @@ function checkJournal (pageJSON, site, slug) {
     console.error('Checks fail with', error)
     checkerResults.set('checks', true)
   }
-
-  console.log("results", checkerResults)
 
   return checkerResults
 }
