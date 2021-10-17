@@ -1,7 +1,25 @@
 // apply journal action to page
 function applyAction (page, action) {
   let index
+
   const order = () => Array.from(page.story || []).map((item) => (item != null ? item.id : undefined))
+// the order function looks somewhat different from that generated from the client coffeescript
+/* 
+order = function() {
+      var i, item, len, ref, results;
+      ref = page.story || [];
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        item = ref[i];
+        results.push(item != null ? item.id : void 0);
+      }
+      return results;
+    };
+
+original coffeescript:
+  order = ->
+    (item?.id for item in page.story||[])
+*/
 
   const add = function (after, item) {
     const index = order().indexOf(after) + 1
@@ -49,7 +67,8 @@ function applyAction (page, action) {
       break
   }
 
-  if (!page.journal) { page.journal = [] }
+  // if (!page.journal) { page.journal = [] }
+  page.journal || (page.journal = [])
   return page.journal.push(action)
 }
 

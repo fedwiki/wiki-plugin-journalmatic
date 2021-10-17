@@ -51,6 +51,13 @@ function showScanResults ({ results }) {
     clone.querySelector('p').append(' a check has failed to run.')
     resultDiv.appendChild(clone)
   }
+
+  if (results.has('malformed')) {
+    let clone = template.content.cloneNode(true)
+    clone.querySelector('span').textContent = 'MALFORMED'
+    clone.querySelector('p').append(' journal contains actions that are malformed.')
+    resultDiv.appendChild(clone)
+  }
 }
 
 export { showScanResults }

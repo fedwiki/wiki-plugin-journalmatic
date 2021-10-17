@@ -42,6 +42,51 @@ function checkJournal (pageJSON, site, slug) {
       checkerResults.set('bloated', true)
     }
 
+    // check all journal actions have expected keys
+
+    // check array has the necessay items
+    const check = (arr, needs) => needs.every(v => arr.includes(v))
+
+    for (const action of page.journal) {
+      try {
+        switch (action.type) {
+          case 'create':
+            if (!check(Object.keys(action), ['type', 'item', 'date'])) {
+              checkerResults.set('malformed', true)
+            }       
+            break
+          case 'add':
+          case 'edit':
+            if (!check(Object.keys(action), ['type', 'item', 'id', 'date'])) {
+              checkerResults.set('malformed', true)
+            }       
+            break
+          case 'move':
+            if (!check(Object.keys(action), ['type', 'order', 'item', 'date'])) {
+              checkerResults.set('malformed', true)
+            }       
+            break
+          case 'fork':
+            if (!check(Object.keys(action), ['type', 'date'])) {
+              checkerResults.set('malformed', true)
+            }       
+            break
+          case 'remove':
+            if (!check(Object.keys(action), ['type', 'id', 'date'])) {
+              checkerResults.set('malformed', true)
+            }       
+            break
+          default:
+            break
+        }
+      } catch (error) {
+        console.error('Malformed Action:', action)
+        checkerResults.set('malformed', true)
+        break
+      }
+    }
+
+
     // check chronology
     let chronError = false
     let date = null
@@ -56,9 +101,6 @@ function checkJournal (pageJSON, site, slug) {
     }
 
     // check journal can recreate current page
-
-
-
 
     // if we have a chronology problem, we check for a sorted revision problem
     // otherwise we just check for a revision problem
