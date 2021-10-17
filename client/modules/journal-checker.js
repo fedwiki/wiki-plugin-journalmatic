@@ -53,30 +53,36 @@ function checkJournal (pageJSON, site, slug) {
           case 'create':
             if (!check(Object.keys(action), ['type', 'item', 'date'])) {
               checkerResults.set('malformed', true)
+              console.log('Malformed:', action)
             }       
             break
           case 'add':
           case 'edit':
             if (!check(Object.keys(action), ['type', 'item', 'id', 'date'])) {
               checkerResults.set('malformed', true)
+              console.log('Malformed:', action)
             }       
             break
           case 'move':
-            if (!check(Object.keys(action), ['type', 'order', 'item', 'date'])) {
+            if (!check(Object.keys(action), ['type', 'order', 'id', 'date'])) {
               checkerResults.set('malformed', true)
+              console.log('Malformed:', action)
             }       
             break
           case 'fork':
             if (!check(Object.keys(action), ['type', 'date'])) {
               checkerResults.set('malformed', true)
+              console.log('Malformed:', action)
             }       
             break
           case 'remove':
             if (!check(Object.keys(action), ['type', 'id', 'date'])) {
               checkerResults.set('malformed', true)
+              console.log('Malformed:', action)
             }       
             break
           default:
+            console.info('Unknown Action Type:', action)
             break
         }
       } catch (error) {
