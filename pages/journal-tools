@@ -198,12 +198,7 @@
         "id": "08bbaf7d716d7f45",
         "text": "<b>\n__WARNING__: It is recommended you take a backup of your pages before using these tools, by saving a [http:/system/export.json wiki export], or taking a backup of the wiki files if you have access to them."
       },
-      "date": 1670785008617,
-      "error": {
-        "type": "error",
-        "msg": "Forbidden",
-        "response": "Forbidden"
-      }
+      "date": 1670785008617
     },
     {
       "type": "edit",
@@ -213,12 +208,7 @@
         "id": "08bbaf7d716d7f45",
         "text": "<b>WARNING</b>: It is recommended you take a backup of your pages before using these tools, by saving a <a href=\"/system/export.json\">wiki export</a>, or taking a backup of the wiki files if you have access to them."
       },
-      "date": 1670785061949,
-      "error": {
-        "type": "error",
-        "msg": "Forbidden",
-        "response": "Forbidden"
-      }
+      "date": 1670785061949
     },
     {
       "type": "edit",
@@ -228,12 +218,7 @@
         "id": "08bbaf7d716d7f45",
         "text": "<b>WARNING</b>: It is recommended you take a backup of your pages before using these tools, by saving a <a href=\"/system/export.json\" class=\"external\">wiki export</a>, or taking a backup of the wiki files if you have access to them."
       },
-      "date": 1670785136199,
-      "error": {
-        "type": "error",
-        "msg": "Forbidden",
-        "response": "Forbidden"
-      }
+      "date": 1670785136199
     },
     {
       "type": "edit",
@@ -243,12 +228,7 @@
         "id": "08bbaf7d716d7f45",
         "text": "<b>WARNING</b>: It is recommended you take a backup of your pages before using these tools, by saving a <a href=\"/system/export.json\" class=\"external\">wiki export </a>, or taking a backup of the wiki files if you have access to them."
       },
-      "date": 1670785201098,
-      "error": {
-        "type": "error",
-        "msg": "Forbidden",
-        "response": "Forbidden"
-      }
+      "date": 1670785201098
     }
   ]
 }
