@@ -13,8 +13,5 @@
     "\"plugin\""
   ],
   "author": "Paul Rodwell",
-  "license": "MIT",
-  "peerDependencies": {
-    "wiki-plugin-frame": ">=0.9.0"
-  }
+  "license": "MIT"
 }
