@@ -1,6 +1,6 @@
 {
   "name": "wiki-plugin-journalmatic",
-  "version": "0.2.0-rc.0",
+  "version": "0.2.0",
   "description": "A collection of frame based tools for checking for page/journal issues, a correcting a few.",
   "main": "index.js",
   "scripts": {
