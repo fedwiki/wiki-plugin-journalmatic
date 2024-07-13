@@ -1,7 +1,7 @@
 {
   "name": "wiki-plugin-journalmatic",
   "version": "0.2.0",
-  "description": "A collection of frame based tools for checking for page/journal issues, a correcting a few.",
+  "description": "A collection of frame-based tools for checking for page/journal issues, and correcting a few.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
