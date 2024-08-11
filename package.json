@@ -1,6 +1,6 @@
 {
   "name": "wiki-plugin-journalmatic",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Federated Wiki - Journalmatic Plugin",
   "main": "index.js",
   "scripts": {
