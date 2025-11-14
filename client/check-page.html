@@ -9,6 +9,7 @@
 
       import { checkJournal } from './modules/journal-checker.js'
       import { showScanResults } from './modules/show-scan-results.js'
+      import { DROP_MESSAGE_KIND, parseWikiFlagPayload, serializeDataTransfer } from './modules/drop-payload.mjs'
 
       // prevent reload when dropping wiki page flag (or any url)
       window.addEventListener("dragover",function(e){
@@ -28,10 +29,6 @@
           window.location.hash.substr(1)
         ).entries()
       )
-
-      function dragover_handler(ev) {
-        ev.preventDefault()
-      }
 
       function error_clear() {
         document.querySelector('#error-message').innerHTML = ''
@@ -59,6 +56,10 @@
         }
       }
 
+      function dragover_handler(ev) {
+        ev.preventDefault()
+      }
+
       function show_results({ site, slug, pageJSON, results }) {
 
         const messageDiv = document.querySelector('#message')
@@ -73,53 +74,6 @@
         newP.innerHTML = title
         messageDiv.appendChild(newP)
         showScanResults({ results })
-      }
-
-      async function drop_handler(ev) {
-        ev.preventDefault()
-        error_clear()
-        let dt = ev.dataTransfer
-        if (dt != null) {
-          let types = dt.types
-          if ((types != null) && (types.includes('text/uri-list') || types.includes('text/x-moz-urlz'))) {
-            let url = dt.getData('URL')
-            if (url != null) {
-              // we have a url
-              // but is it a page?
-              let found, ignore, origin, ref, site, slug
-              if (found = url.match(/^(https?:)\/\/([a-zA-Z0-9:.-]+)(\/([a-zA-Z0-9:.-]+)\/([a-z0-9-]+(_rev\d+)?))+$/)) {
-                let protocol = found[1]
-                let origin = found[2]
-                let site = found[4]
-                let slug = found[5]
-                if (['view','local','origin'].includes(site)) {
-                  site = origin
-                }
-                // we have a wiki page
-                let pageURL = protocol + '//' + site + '/' + slug + '.json'
-                console.info('we have a page', pageURL)
-                fetch_page(pageURL)
-                .then(pageJSON => {
-                  return { results: checkJournal(pageJSON, site, slug), pageJSON }
-                })
-                .then(({ results, pageJSON }) => {
-                  show_results({site, slug, pageJSON, results})
-                  // resize frame
-                  window.parent.postMessage({
-                    action: "resize",
-                    height: document.body.scrollHeight + 2
-                  }, "*")
-                })
-              } else {
-                show_error('That does not look like a page flag!')
-              }
-            } else {
-              show_error('Unrecognised item dropped')
-            }
-          } else {
-            show_error('Unrecognised item dropped')
-          }
-        }
       }
 
       async function fetch_page(url) {
@@ -139,10 +93,78 @@
           })
         return pageJSON
       }
+      function parentOrigin () {
+        try {
+          return new URL(document.referrer).origin
+        } catch (error) {
+          return null
+        }
+      }
+
+      const allowedOrigin = parentOrigin()
+
+      function handleDropPayload (payload, _options = {}) {
+        error_clear()
+        const flag = parseWikiFlagPayload(payload)
+        if (!flag) {
+          show_error('That does not look like a page flag!')
+          return
+        }
+
+        fetch_page(flag.pageURL)
+        .then(pageJSON => {
+          return { results: checkJournal(pageJSON, flag.site, flag.slug), pageJSON }
+        })
+        .then(({ results, pageJSON }) => {
+          show_results({ site: flag.site, slug: flag.slug, pageJSON, results })
+          window.parent.postMessage({
+            action: "resize",
+            height: document.body.scrollHeight + 2
+          }, "*")
+        })
+      }
+
+      function drop_handler(ev) {
+        ev.preventDefault()
+        handleDropPayload(serializeDataTransfer(ev.dataTransfer))
+      }
+
+      function handleRelayMessage (event) {
+        if (event.source !== window.parent) return
+        if (event.data?.kind !== DROP_MESSAGE_KIND) return
+        if (allowedOrigin && event.origin !== allowedOrigin) return
+        handleDropPayload(event.data.payload)
+      }
+
+      async function requestManualUrl () {
+        if (navigator.clipboard?.readText) {
+          try {
+            const clipboardText = (await navigator.clipboard.readText()).trim()
+            if (clipboardText) {
+              return clipboardText
+            }
+          } catch (error) {
+            // clipboard permission denied; fall back to prompt
+          }
+        }
+        const promptText = window.prompt('Paste a wiki page URL to send to Journalmatic')
+        return promptText ? promptText.trim() : ''
+      }
+
+      async function handleManualSendClick (event) {
+        const urlText = await requestManualUrl()
+        if (!urlText) return
+        handleDropPayload({
+          types: ['text/plain'],
+          text: urlText
+        }, { shiftKey: Boolean(event?.shiftKey) })
+      }
 
       document.querySelector('#drop_zone').addEventListener('drop', drop_handler)
       document.querySelector('#drop_zone').addEventListener('dragenter', dragover_handler)
       document.querySelector('#drop_zone').addEventListener('dragover', dragover_handler)
+      window.addEventListener('message', handleRelayMessage)
+      document.querySelector('[data-action="jm-send-to-frame"]')?.addEventListener('click', handleManualSendClick)
 
       window.link_click = link_click
 
@@ -152,6 +174,8 @@
     <h4>Journal Checker</h4>
     <div id="drop_zone">
       <p>drop page flag here</p>
+      <button type="button" data-action="jm-send-to-frame">Send to Journalmatic</button>
+      <p class="drop-help">Chrome/Safari: click the button or paste a URL if dragging fails.</p>
     </div>
     <div id="message"></div>
     <div id="results"></div>
