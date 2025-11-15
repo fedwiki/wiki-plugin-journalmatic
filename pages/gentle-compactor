@@ -12,6 +12,11 @@
       "text": "Errors targeted:\n* HUGE\n* BLOATED\n* CHRONOLOGY"
     },
     {
+      "type": "markdown",
+      "id": "c0eea6a1d6980c23",
+      "text": "**NOTE:** In some browsers drag and drop into the frame plugin items used by journalmatic is broken. A workaround is available, by opening the journalmatic tools in a separate window, or tab."
+    },
+    {
       "type": "frame",
       "id": "f00d6a8c4f5f78a7",
       "text": "PLUGIN journalmatic/gentle-compactor.html"
@@ -57,6 +62,20 @@
       },
       "after": "0e99a507823f33e1",
       "date": 1632999725571
+    },
+    {
+      "id": "c0eea6a1d6980c23",
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "c0eea6a1d6980c23",
+        "text": "**NOTE:** In some browsers drag and drop into the frame plugin items used by journalmatic is broken. A workaround is available, by opening the journalmatic tools in a separate window, or tab."
+      },
+      "after": "0e99a507823f33e1",
+      "attribution": {
+        "page": "Journal Tools"
+      },
+      "date": 1763217699720
     }
   ]
 }

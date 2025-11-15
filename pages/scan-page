@@ -7,6 +7,11 @@
       "text": "Scan a page for known problems."
     },
     {
+      "type": "markdown",
+      "id": "c0eea6a1d6980c23",
+      "text": "**NOTE:** In some browsers drag and drop into the frame plugin items used by journalmatic is broken. A workaround is available, by opening the journalmatic tools in a separate window, or tab."
+    },
+    {
       "type": "frame",
       "id": "c3ab25ddb4b8433a",
       "text": "PLUGIN journalmatic/check-page.html"
@@ -41,6 +46,20 @@
       },
       "after": "4c97ebd8943f4294",
       "date": 1632844149427
+    },
+    {
+      "id": "c0eea6a1d6980c23",
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "c0eea6a1d6980c23",
+        "text": "**NOTE:** In some browsers drag and drop into the frame plugin items used by journalmatic is broken. A workaround is available, by opening the journalmatic tools in a separate window, or tab."
+      },
+      "after": "4c97ebd8943f4294",
+      "attribution": {
+        "page": "Journal Tools"
+      },
+      "date": 1763217670409
     }
   ]
 }

@@ -8,6 +8,11 @@
     },
     {
       "type": "markdown",
+      "id": "c0eea6a1d6980c23",
+      "text": "**NOTE:** In some browsers drag and drop into the frame plugin items used by journalmatic is broken. A workaround is available, by opening the journalmatic tools in a separate window, or tab."
+    },
+    {
+      "type": "markdown",
       "id": "46f6b9522b9b520e",
       "text": "# Scanning Tools"
     },
@@ -229,6 +234,27 @@
         "text": "<b>WARNING</b>: It is recommended you take a backup of your pages before using these tools, by saving a <a href=\"/system/export.json\" class=\"external\">wiki export </a>, or taking a backup of the wiki files if you have access to them."
       },
       "date": 1670785201098
+    },
+    {
+      "type": "add",
+      "id": "c0eea6a1d6980c23",
+      "item": {
+        "type": "factory",
+        "id": "c0eea6a1d6980c23",
+        "text": "ddd"
+      },
+      "after": "6293d77b90ed43d2",
+      "date": 1763217616780
+    },
+    {
+      "type": "edit",
+      "id": "c0eea6a1d6980c23",
+      "item": {
+        "type": "markdown",
+        "id": "c0eea6a1d6980c23",
+        "text": "**NOTE:** In some browsers drag and drop into the frame plugin items used by journalmatic is broken. A workaround is available, by opening the journalmatic tools in a separate window, or tab."
+      },
+      "date": 1763217641436
     }
   ]
 }
