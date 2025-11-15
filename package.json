@@ -1,16 +1,15 @@
 {
   "name": "wiki-plugin-journalmatic",
   "version": "0.2.1",
-  "description": "Federated Wiki - Journalmatic Plugin",
+  "description": "A collection of frame-based tools for checking for page/journal issues, and correcting a few.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "wiki",
-    "\"federated",
-    "wiki\"",
-    "\"plugin\""
+    "federated wiki",
+    "plugin"
   ],
   "author": "Paul Rodwell",
   "license": "MIT"
