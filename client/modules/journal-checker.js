@@ -1,10 +1,9 @@
 import { revision } from './revision.js'
 
-function checkJournal (pageJSON, site, slug) {
-  
+function checkJournal(pageJSON, site, slug) {
   const checkerResults = new Map()
 
-  function compare (a, b) {
+  function compare(a, b) {
     try {
       if (a.date < b.date) {
         return -1
@@ -19,9 +18,9 @@ function checkJournal (pageJSON, site, slug) {
     }
   }
 
-  function basicChecks (page) {
+  function basicChecks(page) {
     // check for nulls
-    const isNotNull = (item) => (!item || !item.type)
+    const isNotNull = item => !item || !item.type
     // an empty page is not a nulls error!
     if (page.story.length != 0) {
       if (page.story.every(isNotNull)) {
@@ -54,32 +53,38 @@ function checkJournal (pageJSON, site, slug) {
             if (!check(Object.keys(action), ['type', 'item', 'date'])) {
               checkerResults.set('malformed', true)
               console.log('Malformed:', action)
-            }       
+            }
             break
           case 'add':
           case 'edit':
             if (!check(Object.keys(action), ['type', 'item', 'id', 'date'])) {
               checkerResults.set('malformed', true)
               console.log('Malformed:', action)
-            }       
+            }
+            if (action.attribution?.site?.endsWith(':')) {
+              checkerResults.set('attribution', action)
+            }
             break
           case 'move':
             if (!check(Object.keys(action), ['type', 'order', 'id', 'date'])) {
               checkerResults.set('malformed', true)
               console.log('Malformed:', action)
-            }       
+            }
             break
           case 'fork':
             if (!check(Object.keys(action), ['type', 'date'])) {
               checkerResults.set('malformed', true)
               console.log('Malformed:', action)
-            }       
+            }
+            if (action.site?.endsWith(':')) {
+              checkerResults.set('attribution', action)
+            }
             break
           case 'remove':
             if (!check(Object.keys(action), ['type', 'id', 'date'])) {
               checkerResults.set('malformed', true)
               console.log('Malformed:', action)
-            }       
+            }
             break
           default:
             console.info('Unknown Action Type:', action)
@@ -91,7 +96,6 @@ function checkJournal (pageJSON, site, slug) {
         break
       }
     }
-
 
     // check chronology
     let chronError = false
@@ -120,14 +124,17 @@ function checkJournal (pageJSON, site, slug) {
       }
 
       const revIndex = sortedJournal.length
-      const revPage = revision({ revIndex, journal: sortedJournal, title: page.title })
+      const revPage = revision({
+        revIndex,
+        journal: sortedJournal,
+        title: page.title,
+      })
 
       if (JSON.stringify(page.story) !== JSON.stringify(revPage.story)) {
         console.info('Sorted journal has revision problem', { page, revPage })
         checkerResults.set('revision', true)
       }
     } else {
-      
       // check for missing creation
       if (page.journal[0].type != 'create') {
         console.log('create not first action!')
@@ -135,7 +142,11 @@ function checkJournal (pageJSON, site, slug) {
       }
 
       const revIndex = page.journal.length
-      const revPage = revision({ revIndex, journal: page.journal, title: page.title })
+      const revPage = revision({
+        revIndex,
+        journal: page.journal,
+        title: page.title,
+      })
 
       if (JSON.stringify(page.story) !== JSON.stringify(revPage.story)) {
         console.info('Revision problem', { page, revPage })
