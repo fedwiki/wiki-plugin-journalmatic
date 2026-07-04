@@ -54,7 +54,12 @@
     {
       "type": "paragraph",
       "id": "9b12d46ba08ce2f9",
-      "text": "[[Gentle Compactor]]: Sorts and gently compresses a page's journal. Will fix CHRONOLOGY errors, and help with HUGE and BLOATED. "
+      "text": "[[Gentle Compactor]]: Sorts and gently compresses a page's journal. Will fix CHRONOLOGY errors, and help with HUGE and BLOATED."
+    },
+    {
+      "type": "paragraph",
+      "id": "190cb832b7e2521c",
+      "text": "[[Rectify Attribution Anomaly]]: Removes any trailing colons `:` found in wiki names in the journal. Fixes ATTRIBUTION errors in the journal. "
     }
   ],
   "journal": [
@@ -255,6 +260,27 @@
         "text": "**NOTE:** In some browsers drag and drop into the frame plugin items used by journalmatic is broken. A workaround is available, by opening the journalmatic tools in a separate window, or tab."
       },
       "date": 1763217641436
+    },
+    {
+      "type": "edit",
+      "id": "9b12d46ba08ce2f9",
+      "item": {
+        "type": "paragraph",
+        "id": "9b12d46ba08ce2f9",
+        "text": "[[Gentle Compactor]]: Sorts and gently compresses a page's journal. Will fix CHRONOLOGY errors, and help with HUGE and BLOATED."
+      },
+      "date": 1782897300581
+    },
+    {
+      "type": "add",
+      "id": "190cb832b7e2521c",
+      "item": {
+        "type": "paragraph",
+        "id": "190cb832b7e2521c",
+        "text": "[[Rectify Attribution Anomaly]]: Removes any trailing colons `:` found in wiki names in the journal. Fixes ATTRIBUTION errors in the journal. "
+      },
+      "after": "9b12d46ba08ce2f9",
+      "date": 1782897504742
     }
   ]
 }
