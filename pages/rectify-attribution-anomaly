@@ -1,0 +1,108 @@
+{
+  "title": "Rectify Attribution Anomaly",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "d419a6a394e36e31",
+      "text": "Removes trailing colons from wiki names in the journal."
+    },
+    {
+      "type": "markdown",
+      "id": "5cf395798cfd5980",
+      "text": "Errors targeted:\n\n* ATTRIBUTION "
+    },
+    {
+      "type": "markdown",
+      "id": "c0eea6a1d6980c23",
+      "text": "**NOTE:** In some browsers drag and drop into the frame plugin items used by journalmatic is broken. A workaround is available, by opening the journalmatic tools in a separate window, or tab."
+    },
+    {
+      "type": "frame",
+      "id": "f9aa320e4aaf2dce",
+      "text": "PLUGIN journalmatic/attribution-fix.html"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Rectify Attribution Anomaly",
+        "story": []
+      },
+      "date": 1782897515456
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d419a6a394e36e31"
+      },
+      "id": "d419a6a394e36e31",
+      "type": "add",
+      "date": 1782897589499
+    },
+    {
+      "type": "edit",
+      "id": "d419a6a394e36e31",
+      "item": {
+        "type": "paragraph",
+        "id": "d419a6a394e36e31",
+        "text": "Removes trailing colons from wiki names in the journal."
+      },
+      "date": 1782897619547
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5cf395798cfd5980"
+      },
+      "id": "5cf395798cfd5980",
+      "type": "add",
+      "after": "d419a6a394e36e31",
+      "date": 1782897634858
+    },
+    {
+      "type": "edit",
+      "id": "5cf395798cfd5980",
+      "item": {
+        "type": "markdown",
+        "id": "5cf395798cfd5980",
+        "text": "Errors targeted:\n\n* ATTRIBUTION "
+      },
+      "date": 1782897669785
+    },
+    {
+      "id": "c0eea6a1d6980c23",
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "c0eea6a1d6980c23",
+        "text": "**NOTE:** In some browsers drag and drop into the frame plugin items used by journalmatic is broken. A workaround is available, by opening the journalmatic tools in a separate window, or tab."
+      },
+      "after": "5cf395798cfd5980",
+      "attribution": {
+        "page": "Journal Tools"
+      },
+      "date": 1782897680265
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f9aa320e4aaf2dce"
+      },
+      "id": "f9aa320e4aaf2dce",
+      "type": "add",
+      "after": "c0eea6a1d6980c23",
+      "date": 1782897683392
+    },
+    {
+      "type": "edit",
+      "id": "f9aa320e4aaf2dce",
+      "item": {
+        "type": "frame",
+        "id": "f9aa320e4aaf2dce",
+        "text": "PLUGIN journalmatic/attribution-fix.html"
+      },
+      "date": 1782897732666
+    }
+  ]
+}

@@ -1,24 +1,33 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Check Page Journal</title>
+    <title>Chronology Fix</title>
     <meta charset="utf-8" />
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>➡</text></svg>" />
     <link rel="stylesheet" href="./journal-tools.css" />
     <script type="module">
+      import { fixAttribution } from './modules/attrib-fix.js'
       import { checkJournal } from './modules/journal-checker.js'
       import { showScanResults } from './modules/show-scan-results.js'
 
       // prevent reload when dropping wiki page flag (or any url)
-      window.addEventListener('dragover', function (e) {
-        e.preventDefault()
-      })
-      window.addEventListener('drop', function (e) {
-        e = e || event
-        e.preventDefault()
-      })
+      window.addEventListener(
+        'dragover',
+        function (e) {
+          e.preventDefault()
+        },
+        false,
+      )
+      window.addEventListener(
+        'drop',
+        function (e) {
+          e = e || event
+          e.preventDefault()
+        },
+        false,
+      )
 
       window.addEventListener('dragenter', function (e) {
         e.preventDefault()
@@ -38,13 +47,16 @@
         document.querySelector('#error-message').innerHTML = '<p>' + err + '</p>'
       }
 
-      function link_click(event) {
-        event.preventDefault()
-        if (event.target.dataset['site'] === identifiers.site) {
+      function link_click(ev) {
+        ev.preventDefault()
+        // to be done...
+        console.log('identifiers', identifiers)
+        console.log('link clicked', ev)
+        if (ev.target.dataset['site'] === identifiers.site) {
           window.parent.postMessage(
             {
               action: 'doInternalLink',
-              title: event.target.text,
+              title: ev.target.text,
               keepLineup: event.shiftKey,
             },
             '*',
@@ -53,28 +65,33 @@
           window.parent.postMessage(
             {
               action: 'doInternalLink',
-              title: event.target.text,
-              site: event.target.dataset['site'],
-              keepLineup: event.shiftKey,
+              title: ev.target.text,
+              site: ev.target.dataset['site'],
             },
             '*',
           )
         }
       }
 
-      function show_results({ site, slug, pageJSON, results }) {
+      function show_message({ message, clear }) {
         const messageDiv = document.querySelector('#message')
-
-        const newP = document.createElement('p')
-        let title = ''
-        if (results.size == 0) {
-          title = `No errors found on <a class='internal' href='//${site}/${slug}.html' title='${site}' data-site='${site}' data-slug='${slug}' onclick='link_click(event)'>${pageJSON.title}</a>`
-        } else {
-          title = `Errors found on <a class='internal' href='//${site}/${slug}.html' title='${site}' data-site='${site}' data-slug='${slug}' onclick='link_click(event)'>${pageJSON.title}</a>`
+        if (clear) {
+          messageDiv.replaceChildren()
         }
-        newP.innerHTML = title
-        messageDiv.appendChild(newP)
-        showScanResults({ results })
+        if (message) {
+          const newP = document.createElement('p')
+          newP.style['margin'] = 0
+          newP.innerHTML = message
+          messageDiv.appendChild(newP)
+        }
+        //
+        window.parent.postMessage(
+          {
+            action: 'resize',
+            height: document.body.scrollHeight + 2,
+          },
+          '*',
+        )
       }
 
       async function drop_handler(ev) {
@@ -102,20 +119,54 @@
                 // we have a wiki page
                 let pageURL = protocol + '//' + site + '/' + slug + '.json'
                 console.info('we have a page', pageURL)
+
                 fetch_page(pageURL)
                   .then(pageJSON => {
-                    return {
-                      results: checkJournal(pageJSON, site, slug),
-                      pageJSON,
+                    let linkTitle = site
+                    if (site === identifiers.site) {
+                      linkTitle = 'view'
                     }
+                    show_message({
+                      message: `Compacting Page - <a class='internal' href='//${site}/${slug}.html' title='${linkTitle}' data-site='${site}' data-slug='${slug}' onclick='link_click(event)'>${pageJSON.title}</a>`,
+                      clear: true,
+                    })
+
+                    return fixAttribution({ pageJSON, site, slug })
                   })
-                  .then(({ results, pageJSON }) => {
-                    show_results({ site, slug, pageJSON, results })
-                    // resize frame
+                  .then(page => {
+                    return { page, results: checkJournal(page, site, slug) }
+                  })
+                  .then(function ({ page, results }) {
+                    console.info('results', results)
+                    if (results.size === 0) {
+                      show_message({
+                        message: 'Compacted page has no journal errors',
+                      })
+                    } else {
+                      show_message({
+                        message: `Compacted page has ${results.size} problems remaining`,
+                      })
+                      showScanResults({ results })
+                    }
+                    return page
+                  })
+                  .then(page => {
+                    // add flag to record compactor
+                    let compactorFork = {
+                      type: 'fork',
+                      date: Date.now(),
+                    }
+                    if (site != identifiers.site) {
+                      compactorFork.site = site
+                    }
+                    page.journal.push(compactorFork)
+
                     window.parent.postMessage(
                       {
-                        action: 'resize',
-                        height: document.body.scrollHeight + 2,
+                        action: 'showResult',
+                        page,
+                        // pageKey,
+                        keepLineup: ev.shiftKey,
                       },
                       '*',
                     )
@@ -158,8 +209,8 @@
     </script>
   </head>
   <body>
-    <h4>Journal Checker</h4>
-    <div id="drop_zone">
+    <h4>Rectify Attribution Aliasing</h4>
+    <div id="drop_zone" style="border: 1px dashed blue; text-align: center; margin-bottom: 12px">
       <p>drop page flag here</p>
     </div>
     <div id="message"></div>

@@ -1,5 +1,4 @@
-function showScanResults ({ results }) {
-
+function showScanResults({ results }) {
   const resultDiv = document.querySelector('#results')
   const template = document.querySelector('#results-line')
 
@@ -56,6 +55,13 @@ function showScanResults ({ results }) {
     let clone = template.content.cloneNode(true)
     clone.querySelector('span').textContent = 'MALFORMED'
     clone.querySelector('p').append(' journal contains actions that are malformed.')
+    resultDiv.appendChild(clone)
+  }
+
+  if (results.has('attribution')) {
+    let clone = template.content.cloneNode(true)
+    clone.querySelector('span').textContent = 'ATTRIBUTION'
+    clone.querySelector('p').append(' attribution with implied port')
     resultDiv.appendChild(clone)
   }
 }
